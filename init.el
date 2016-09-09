@@ -53,7 +53,12 @@
                          spacemacs-dark
                          spacemacs-light)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font '("Source Code Pro"
+   ;; default: "Source Code Pro"
+   ;; "Courier New"
+   ;; "Monaco"
+   ;; "Pt Mono"
+   ;; "Inconsolata-dz for Powerline"
+   dotspacemacs-default-font '("Pt Mono"
                                :size 13
                                :weight normal
                                :width normal
