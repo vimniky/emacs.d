@@ -33,7 +33,8 @@
      )
    dotspacemacs-additional-packages '()
    dotspacemacs-frozen-packages '()
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages
+   '(coffee-mode)
    dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
@@ -127,7 +128,7 @@
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   (define-key evil-normal-state-map "U" 'undo-tree-redo)
 
-  ;; add  one  more visual space at line end
+  ;; add one more visual space at line end
   (setq evil-move-cursor-back nil)
   ;; remove annoying blinking
   (setq company-echo-delay 0)
