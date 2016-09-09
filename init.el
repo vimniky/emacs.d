@@ -108,6 +108,19 @@
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   (define-key evil-normal-state-map "U" 'undo-tree-redo)
+
+  ;; remove annoying blinking
+  (setq company-echo-delay 0)
+
+  ;; symbol-linked file : just don't ask me again !
+  (setq vc-follow-symlinks nil)
+
+  ;; makes eshell nicer
+  (defun my-eshell-mode-faces ()
+    (face-remap-add-relative 'default '((:foreground "#BD9700")))
+    (face-remap-add-relative 'eshell-prompt '((:foreground "#BD9700" :weight bold))))
+  (add-hook 'eshell-mode-hook 'my-eshell-mode-faces)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
