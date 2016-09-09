@@ -7,17 +7,29 @@
    dotspacemacs-configuration-layers
    '(
      helm
+     auto-completion
+     emacs-lisp
+     javascript
+     haskell
+     vim-powerline
+     intero
+     react
+     html
+     purescript
+     (elm :variables
+          elm-format-command "elm-format-0.17")
+     markdown
      ;; auto-completion
      ;; better-defaults
      emacs-lisp
+     osx
+     syntax-checking
      ;; git
-     ;; markdown
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      ;; spell-checking
-     ;; syntax-checking
      ;; version-control
      )
    dotspacemacs-additional-packages '()
@@ -38,7 +50,8 @@
                                 (projects . 7))
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(gruvbox
+                         spacemacs-dark
                          spacemacs-light)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro"
@@ -163,9 +176,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#d2ceda" "#f2241f" "#67b11d" "#b1951d" "#3a81c3" "#a31db1" "#21b8c7" "#655370"])
+ '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link))))
+    (grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
+ '(psc-ide-add-import-on-completion t t)
+ '(psc-ide-rebuild-on-save nil t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
