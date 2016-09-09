@@ -121,6 +121,39 @@
     (face-remap-add-relative 'eshell-prompt '((:foreground "#BD9700" :weight bold))))
   (add-hook 'eshell-mode-hook 'my-eshell-mode-faces)
 
+  ;; elm
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-elm))
+
+  ;; react
+  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
+
+  ;; javascript
+  (setq js2-strict-missing-semi-warning nil)
+  (setq-default
+   ;; js2-mode
+   js2-basic-offset 2
+   js-indent-level 2
+   ;; web-mode
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-attr-indent-offset 2)
+
+  ;; only display file name
+  ;; (setq frame-title-format "%b")
+  ;; display full file path
+  (setq frame-title-format
+        '(:eval
+          (if buffer-file-name
+              (replace-regexp-in-string
+               "\\\\" "/"
+               (replace-regexp-in-string
+                (regexp-quote (getenv "HOME")) "~"
+                (convert-standard-filename buffer-file-name)))
+            (buffer-name))))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
