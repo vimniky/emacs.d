@@ -103,6 +103,11 @@
   )
 
 (defun dotspacemacs/user-config ()
+  (setq-default evil-escape-key-sequence "jk")
+  (setq-default evil-insert-state-cursor '("green" box))
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-normal-state-map "U" 'undo-tree-redo)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
