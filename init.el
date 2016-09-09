@@ -177,6 +177,9 @@
 
   )
 
+;; more details -->  auto-completion layer documenttation
+(setq auto-completion-private-snippets-directory (concat dotspacemacs-directory "snippets"))
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (custom-set-variables
