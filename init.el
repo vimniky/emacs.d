@@ -108,7 +108,6 @@
    dotspacemacs-default-package-repository nil
    dotspacemacs-whitespace-cleanup nil
    ))
-
 (defun dotspacemacs/user-init ()
   (setq configuration-layer--elpa-archives
         '(("melpa-cn" . "https://elpa.zilongshanren.com/melpa/")
@@ -119,9 +118,10 @@
   ;; (setq tramp-mode nil)
   (setq tramp-ssh-controlmaster-options
         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+  ;; disable exec-from-shell-warning
+  (setq exec-path-from-shell-check-startup-files nil)
+  ;; (setq exec-path-from-shell-arguments '("-l"))
   )
-
-
 (defun dotspacemacs/user-config ()
   (setq-default evil-escape-key-sequence "jk")
   (setq-default evil-insert-state-cursor '("green" box))
@@ -152,6 +152,7 @@
 
   ;; javascript
   (setq js2-strict-missing-semi-warning nil)
+  (setq js2-strict-trailing-comma-warning nil)
   (setq-default
    ;; js2-mode
    js2-basic-offset 2
