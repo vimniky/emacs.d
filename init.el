@@ -8,7 +8,8 @@
    '(
      helm
      better-defaults
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-snippets-in-popup t)
      emacs-lisp
      javascript
      haskell
