@@ -119,6 +119,7 @@
         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
   )
 
+
 (defun dotspacemacs/user-config ()
   (setq-default evil-escape-key-sequence "jk")
   (setq-default evil-insert-state-cursor '("green" box))
@@ -126,6 +127,8 @@
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   (define-key evil-normal-state-map "U" 'undo-tree-redo)
 
+  ;; add  one  more visual space at line end
+  (setq evil-move-cursor-back nil)
   ;; remove annoying blinking
   (setq company-echo-delay 0)
 
