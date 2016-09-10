@@ -124,6 +124,11 @@
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   (define-key evil-normal-state-map "U" 'undo-tree-redo)
 
+  ;; global hungry-delete-mode and solve conflict between hungty-delete-mode
+  ;; and smart-parents-mode
+  (global-hungry-delete-mode)
+  (defadvice hungry-delete-backward (before sp-delete-pair-advice activate) (save-match-data (sp-delete-pair (ad-get-arg 0))))
+
   ;; add one more visual space at line end
   (setq evil-move-cursor-back nil)
   ;; remove annoying blinking
