@@ -25,18 +25,26 @@
           elm-format-command "elm-format-0.17")
      osx
      syntax-checking
-     git
+     (git :variables
+          git-magit-status-fullscreen t
+          magit-push-always-verify nil
+          magit-save-repository-buffers 'dontask
+          magit-revert-buffers 'silent
+          magit-refs-show-commit-count 'all
+          magit-revision-show-gravatars nil)
+     (version-control :variables
+                      version-control-diff-tool 'diff-hl
+                      version-control-global-margin t)
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      ;; spell-checking
-     ;; version-control
      )
    dotspacemacs-additional-packages '()
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
-   '(coffee-mode neotree)
+   '(coffee-mode neotree holy-mode)
    dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
@@ -61,7 +69,7 @@
    ;; "Monaco"
    ;; "Pt Mono"
    ;; "Inconsolata-dz for Powerline"
-   dotspacemacs-default-font '("Pt Mono"
+   dotspacemacs-default-font '("Source Code Pro"
                                :size 13
                                :weight normal
                                :width normal
@@ -125,6 +133,13 @@
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   (define-key evil-normal-state-map "U" 'undo-tree-redo)
   (setq ranger-ignored-extensions '("mkv" "iso" "mp4"))
+
+  ;; ctrl-0 to open iterm
+  (define-key global-map (kbd "C-0") 'iterm-here)
+  (defun iterm-here ()
+    (interactive)
+    (dired-smart-shell-command "open -a iTerm $PWD" nil nil))
+
   ;; global hungry-delete-mode and solve conflict between hungty-delete-mode
   ;; and smart-parents-mode
   (global-hungry-delete-mode)
@@ -195,7 +210,7 @@
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
+    (git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
  '(psc-ide-add-import-on-completion t t)
  '(psc-ide-rebuild-on-save nil t))
 (custom-set-faces
