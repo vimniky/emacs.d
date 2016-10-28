@@ -69,7 +69,7 @@
    ;; "Monaco"
    ;; "Pt Mono"
    ;; "Inconsolata-dz for Powerline"
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '( "Inconsolata-dz for Powerline"
                                :size 13
                                :weight normal
                                :width normal
