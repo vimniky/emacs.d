@@ -11,10 +11,10 @@
      (better-defaults :variables better-defaults-move-to-beginning-of-code-first t)
      (auto-completion :variables
                       auto-completion-enable-snippets-in-popup t)
+     racket
      emacs-lisp
      javascript
      (haskell :variables haskell-completion-backend 'intero)
-     ;; vim-powerline
      typescript
      react
      purescript
