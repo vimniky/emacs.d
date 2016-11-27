@@ -15,7 +15,8 @@
      emacs-lisp
      javascript
      (haskell :variables haskell-completion-backend 'intero)
-     typescript
+     (typescript :variables
+                 typescript-fmt-on-save t)
      react
      purescript
      html
@@ -129,7 +130,15 @@
   ;; disable exec-from-shell-warning
   (setq exec-path-from-shell-check-startup-files nil)
   ;; (setq exec-path-from-shell-arguments '("-l"))
+  (setq
+   backup-directory-alist '(("." . "~/.saves"))
+   backup-by-copying t
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t)
   )
+
 (defun dotspacemacs/user-config ()
   (setq-default evil-escape-key-sequence "jk")
   (setq-default evil-insert-state-cursor '("gray" box))
@@ -141,6 +150,15 @@
   (define-key evil-normal-state-map "U" 'undo-tree-redo)
   (setq ranger-ignored-extensions '("mkv" "iso" "mp4"))
   (setq powerline-default-separator nil)
+  (setq create-lockfiles nil)
+
+  (define-key evil-normal-state-map ";" 'evil-ex)
+  ;; Don't persist highlighting of evil searching results
+  (global-evil-search-highlight-persist)
+  (global-evil-search-highlight-persist)
+  (turn-off-search-highlight-persist)
+
+  ;; makes eshell nicer
   ;; ctrl-0 to open iterm
   (define-key global-map (kbd "C-0") 'iterm-here)
   (defun iterm-here ()
@@ -179,6 +197,10 @@
    ;; js2-mode
    js2-basic-offset 2
    js-indent-level 2
+   typescript-indent-level 2
+   evil-shift-width 2
+   json-encoding-default-indentation 2
+   json-reformat:indent-width 2
    ;; web-mode
    css-indent-offset 2
    web-mode-markup-indent-offset 2
