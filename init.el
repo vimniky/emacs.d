@@ -188,7 +188,7 @@
     (add-to-list 'company-backends 'company-elm))
 
   ;; react
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
 
   ;; javascript
   (setq js2-strict-missing-semi-warning nil)
@@ -250,3 +250,31 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#d2ceda" "#f2241f" "#67b11d" "#b1951d" "#3a81c3" "#a31db1" "#21b8c7" "#655370"])
+ '(custom-safe-themes
+   (quote
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+ '(evil-want-Y-yank-to-eol nil)
+ '(package-selected-packages
+   (quote
+    (winum unfill evil-commentary hydra highlight anzu iedit undo-tree projectile helm helm-core async f s dash racket-mode faceup tide typescript-mode helm-gtags ggtags emoji-cheat-sheet-plus company-emoji nanoj-dark-theme avk-darkblue-white-theme smex xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary flycheck-haskell company-ghci company-ghc ghc helm-purpose hide-comnt window-purpose imenu-list pug-mode smart-mode-line rich-minority git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
+ '(psc-ide-add-import-on-completion t t)
+ '(psc-ide-rebuild-on-save nil t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
