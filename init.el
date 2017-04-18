@@ -15,7 +15,9 @@
      emacs-lisp
      javascript
      csv
-     (go :variables go-tab-width 4)
+     (go :variables
+         gofmt-command "goimports"
+         go-tab-width 8)
      (haskell :variables haskell-completion-backend 'intero)
      (typescript :variables
                  typescript-fmt-on-save t)
@@ -231,6 +233,22 @@
             (buffer-name))))
 
   )
+
+(defun vimniky-invalidate-cache ()
+  "Invalidate projectile and recentf cache."
+  (interactive)
+  (progn (projectile-invalidate-cache nil)
+         (recentf-cleanup)))
+
+(defun vimniky-revert-buffer ()
+  "revert current buffer to match it's curresponding file on disk"
+  (interactive)
+  (revert-buffer-no-confirm))
+
+(defun vimniky-kill-other-buffers ()
+  "kill all other buffers but current one"
+  (interactive)
+  (spacemacs/kill-other-buffers))
 
 ;; more details -->  auto-completion layer documenttation
 (setq auto-completion-private-snippets-directory (concat dotspacemacs-directory "snippets"))
