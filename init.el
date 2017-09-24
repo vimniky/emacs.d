@@ -5,17 +5,21 @@
    dotspacemacs-ask-for-lazy-installation t
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
-   '(
+   '(sml
+     sql
      helm
      ranger
+     ;; themes-megapack
      (better-defaults :variables better-defaults-move-to-beginning-of-code-first t)
      (auto-completion :variables
                       auto-completion-enable-snippets-in-popup t)
      racket
      emacs-lisp
      javascript
+     python
      csv
-     dash
+     sql
+     ;; dash
      (go :variables
          gofmt-command "goimports"
          go-tab-width 8)
@@ -30,15 +34,17 @@
      yaml
      (elm :variables
           elm-format-command "elm-format-0.17")
+     (typography :variables typography-enable-typographic-editing t)
+     evil-commentary
      osx
      syntax-checking
-     (git :variables
-          git-magit-status-fullscreen t
-          magit-push-always-verify nil
-          magit-save-repository-buffers 'dontask
-          magit-revert-buffers 'silent
-          magit-refs-show-commit-count 'all
-          magit-revision-show-gravatars nil)
+     ;(git :variables
+     ;     git-magit-status-fullscreen t
+     ;     magit-push-always-verify nil
+     ;     magit-save-repository-buffers 'dontask
+     ;     magit-revert-buffers 'silent
+     ;     magit-refs-show-commit-count 'all
+     ;     magit-revision-show-gravatars nil)
      (version-control :variables
                       version-control-global-margin t
                       version-control-diff-tool 'git-gutter
@@ -47,7 +53,7 @@
      ;; org
      ;; spell-checking
      )
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(rjsx-mode)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
    '(coffee-mode holy-mode)
@@ -69,14 +75,18 @@
    dotspacemacs-themes '(leuven
                          deeper-blue
                          manoj-dark
+                         zonokai-red
+                         organic-green
+                         occidental
+                         alect-light
+                         alect-light-alt
                          molokai
-                         gruvbox
                          spacemacs-dark
                          spacemacs-light)
    dotspacemacs-colorize-cursor-according-to-state t
    ;; default: "Source Code Pro"
    ;; "Courier New"
-   ;; "Monaco"
+
    ;; "Pt Mono"
    ;; "Inconsolata-dz for Powerline"
    ;;"Courier New Regular"
@@ -157,19 +167,17 @@
   (define-key evil-insert-state-map (kbd "C-k") 'evil-previous-visual-line)
   (define-key evil-insert-state-map (kbd "C-e") 'evil-end-of-visual-line)
   (define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-visual-line)
-  (define-key evil-insert-state-map (kbd "C-d") 'evil-delete-line)
+  ;; (define-key evil-insert-state-map (kbd "C-d") 'evil-delete-line)
   (define-key evil-insert-state-map (kbd "C-s") 'evil-delete-whole-line)
   (define-key evil-normal-state-map "U" 'undo-tree-redo)
   (setq ranger-ignored-extensions '("mkv" "iso" "mp4"))
   (setq powerline-default-separator nil)
   (setq create-lockfiles nil)
-
   (define-key evil-normal-state-map ";" 'evil-ex)
   ;; Don't persist highlighting of evil searching results
   (global-evil-search-highlight-persist)
   (global-evil-search-highlight-persist)
   (turn-off-search-highlight-persist)
-
   ;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
   (defun revert-buffer-no-confirm ()
     "Revert buffer without confirmation."
@@ -206,7 +214,9 @@
     (add-to-list 'company-backends 'company-elm))
 
   ;; react
-  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
+  (define-key evil-insert-state-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+  ;; (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 
   ;; vue
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
@@ -260,6 +270,106 @@
   (interactive)
   (spacemacs/kill-other-buffers))
 
+;; displace color in place start
+;; Takes a color string like #ffe0e0 and returns a light
+;; or dark foreground color to make sure text is readable.
+(defun fg-from-bg (bg)
+  (let* ((avg (/ (+ (string-to-number (substring bg 1 3) 16)
+                    (string-to-number (substring bg 3 5) 16)
+                    (string-to-number (substring bg 5 7) 16)
+                    ) 3)))
+    (if (> avg 128) "#000000" "#ffffff")
+    ))
+
+;; Improved from http://ergoemacs.org/emacs/emacs_CSS_colors.html
+;; * Avoid mixing up #abc and #abcabc regexps
+;; * Make sure dark background have light foregrounds and vice versa
+(defun xah-syntax-color-hex ()
+  "Syntax color text of the form 「#ff1100」 and 「#abc」 in current buffer.
+URL `https://github.com/mariusk/emacs-color'
+Version 2016-08-09"
+  (interactive)
+  (font-lock-add-keywords
+   nil
+   '(
+     ("#[ABCDEFabcdef[:digit:]]\\{6\\}"
+      (0 (progn (let* ((bgstr (match-string-no-properties 0))
+                       (fgstr (fg-from-bg bgstr)))
+                  (put-text-property
+                   (match-beginning 0)
+                   (match-end 0)
+                   'face (list :background bgstr :foreground fgstr))))))
+     ("#[ABCDEFabcdef[:digit:]]\\{3\\}[^ABCDEFabcdef[:digit:]]"
+      (0 (progn (let* (
+                       (ms (match-string-no-properties 0))
+                       (r (substring ms 1 2))
+                       (g (substring ms 2 3))
+                       (b (substring ms 3 4))
+                       (bgstr (concat "#" r r g g b b))
+                       (fgstr (fg-from-bg bgstr)))
+                  (put-text-property
+                   (match-beginning 0)
+                   (- (match-end 0) 1)
+                   'face (list :background bgstr :foreground fgstr)
+                   )))))
+     ))
+  (font-lock-fontify-buffer))
+
+;; Generates a list of random color values using the
+;; Golden Ratio method described here:
+;;   http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+;; The list will be length long. Example:
+;;
+;; (gen-col-list 3 0.5 0.65)
+;; => ("#be79d2" "#79d2a4" "#d28a79")
+(require 'color)
+(defun gen-col-list (length s v &optional hval)
+  (cl-flet ( (random-float () (/ (random 10000000000) 10000000000.0))
+             (mod-float (f) (- f (ffloor f))) )
+    (unless hval
+      (setq hval (random-float)))
+    (let ((golden-ratio-conjugate (/ (- (sqrt 5) 1) 2))
+          (h hval)
+          (current length)
+          (ret-list '()))
+      (while (> current 0)
+        (setq ret-list
+              (append ret-list
+                      (list (apply 'color-rgb-to-hex (color-hsl-to-rgb h s v)))))
+        (setq h (mod-float (+ h golden-ratio-conjugate)))
+        (setq current (- current 1)))
+      ret-list)))
+
+(defun set-random-rainbow-colors (s l &optional h)
+  ;; Output into message buffer in case you get a scheme you REALLY like.
+  ;; (message "set-random-rainbow-colors %s" (list s l h))
+  (rainbow-delimiters-mode t)
+
+  ;; I also want css style colors in my code.
+  (xah-syntax-color-hex)
+  ;; Show mismatched braces in bright red.
+  (set-face-background 'rainbow-delimiters-unmatched-face "red")
+
+  ;; Rainbow delimiters based on golden ratio
+  (let ( (colors (gen-col-list 9 s l h))
+         (i 1) )
+    (let ( (length (length colors)) )
+      ;;(message (concat "i " (number-to-string i) " length " (number-to-string length)))
+      (while (<= i length) 
+        (let ( (rainbow-var-name (concat "rainbow-delimiters-depth-" (number-to-string i) "-face"))
+               (col (nth i colors)) )
+          ;; (message (concat rainbow-var-name " => " col))
+          (set-face-foreground (intern rainbow-var-name) col))
+        (setq i (+ i 1))))))
+
+(add-hook 'js-mode-hook '(lambda () (set-random-rainbow-colors 0.5 0.49)))
+(add-hook 'css-mode-hook '(lambda () (set-random-rainbow-colors 0.5 0.49)))
+(add-hook 'html-mode-hook '(lambda () (set-random-rainbow-colors 0.5 0.49)))
+(add-hook 'html-mode-hook '(lambda () (set-random-rainbow-colors 0.5 0.49)))
+(add-hook 'emacs-lisp-mode-hook '(lambda () (set-random-rainbow-colors 0.5 0.49)))
+(add-hook 'lisp-mode-hook '(lambda () (set-random-rainbow-colors 0.5 0.49)))
+;; displace color in place ends
+
 ;; more details -->  auto-completion layer documenttation
 (setq auto-completion-private-snippets-directory (concat dotspacemacs-directory "snippets"))
 
@@ -278,7 +388,7 @@
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (evil-commentary hydra highlight anzu iedit undo-tree projectile helm helm-core async f s dash racket-mode faceup tide typescript-mode helm-gtags ggtags emoji-cheat-sheet-plus company-emoji nanoj-dark-theme avk-darkblue-white-theme smex xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary flycheck-haskell company-ghci company-ghc ghc helm-purpose hide-comnt window-purpose imenu-list pug-mode smart-mode-line rich-minority git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
+    (github-browse-file clj-refactor edn cider queue evil-commentary hydra highlight anzu iedit undo-tree projectile helm helm-core async f s dash racket-mode faceup tide typescript-mode helm-gtags ggtags emoji-cheat-sheet-plus company-emoji nanoj-dark-theme avk-darkblue-white-theme smex xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary flycheck-haskell company-ghci company-ghc ghc helm-purpose hide-comnt window-purpose imenu-list pug-mode smart-mode-line rich-minority git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
  '(psc-ide-add-import-on-completion t t)
  '(psc-ide-rebuild-on-save nil t))
 (custom-set-faces
@@ -297,6 +407,8 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#d2ceda" "#f2241f" "#67b11d" "#b1951d" "#3a81c3" "#a31db1" "#21b8c7" "#655370"])
  '(custom-safe-themes
@@ -305,7 +417,7 @@ This function is called at the very end of Spacemacs initialization."
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (helm-dash dash-at-point emojify ht go-rename symon string-inflection evil-commentary hydra highlight anzu iedit undo-tree projectile helm helm-core async f s dash racket-mode faceup tide typescript-mode helm-gtags ggtags emoji-cheat-sheet-plus company-emoji nanoj-dark-theme avk-darkblue-white-theme smex xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary flycheck-haskell company-ghci company-ghc ghc helm-purpose hide-comnt window-purpose imenu-list pug-mode smart-mode-line rich-minority git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
+    (ob-sml sml-mode github-browse-file clj-refactor edn cider queue evil-commentary hydra highlight anzu iedit undo-tree projectile helm helm-core async f s dash racket-mode faceup tide typescript-mode helm-gtags ggtags emoji-cheat-sheet-plus company-emoji nanoj-dark-theme avk-darkblue-white-theme smex xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary flycheck-haskell company-ghci company-ghc ghc helm-purpose hide-comnt window-purpose imenu-list pug-mode smart-mode-line rich-minority git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
  '(psc-ide-add-import-on-completion t t)
  '(psc-ide-rebuild-on-save nil t))
 (custom-set-faces
