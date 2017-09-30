@@ -9,6 +9,7 @@
      sql
      helm
      ranger
+     frame-geometry
      ;; themes-megapack
      (better-defaults :variables better-defaults-move-to-beginning-of-code-first t)
      (auto-completion :variables
