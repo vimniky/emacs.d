@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: import default
+# key: importas
+# --
+import {${1:name}} from '$0'

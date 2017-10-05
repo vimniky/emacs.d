@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: define function
+# key: functiond  
+# --
+function ${1:name}(${2:params}) {
+  $0
+}

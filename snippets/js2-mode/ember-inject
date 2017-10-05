@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: extends ember service
+# key: einject
+# --
+${1:prop}: Ember.${2:Service}.inject($0)
