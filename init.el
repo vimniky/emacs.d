@@ -195,6 +195,13 @@
     (interactive)
     (revert-buffer :ignore-auto :noconfirm))
 
+  ;; In vim and evil, pasting over a text would cause it to be copied, hence making it impossible to paste the same text multiple times.
+  (defun evil-paste-after-from-0 ()
+    (interactive)
+    (let ((evil-this-register ?0))
+      (call-interactively 'evil-paste-after)))
+  (define-key evil-visual-state-map "p" 'evil-paste-after-from-0)
+
   ;; evil-multiedit
   ;; (require 'evil-multiedit)
   ;; Highlights all matches of the selection in the buffer.
