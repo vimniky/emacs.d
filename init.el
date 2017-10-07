@@ -168,6 +168,10 @@
   ;; make helm-projectile-find-file fast
   (setq shell-file-name "/bin/sh")
   (setq projectile-enable-caching t)
+  ;; Disable current line highlight
+  (global-hl-line-mode -1)
+  ;; Show line numbers by default
+  ;; (global-linum-mode))
   (setq-default evil-escape-key-sequence "jk")
   (setq-default evil-insert-state-cursor '("gray" box))
   (setq-default evil-visual-state-cursor '("red" box))
