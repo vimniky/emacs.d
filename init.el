@@ -79,6 +79,7 @@
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
    dotspacemacs-themes '(
+                         manoj-dark
                          molokai
                          leuven
                          deeper-blue
