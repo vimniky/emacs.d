@@ -5,7 +5,8 @@
    dotspacemacs-ask-for-lazy-installation t
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
-   '(sml
+   '(nginx
+     sml
      sql
      helm
      ranger
@@ -32,7 +33,7 @@
      purescript
      html
      markdown
-     emoji
+     ;; emoji
      yaml
      (elm :variables
           elm-format-command "elm-format-0.17")
@@ -59,6 +60,7 @@
                                       ;; (evil-mc :location (recipe :fetcher github :repo "gabesoft/evil-mc"))
                                       rjsx-mode
                                       evil-multiedit
+                                      vue-mode
                                       )
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
@@ -165,6 +167,10 @@
   )
 
 (defun dotspacemacs/user-config ()
+  ;; don't create lock files
+  (setq create-lockfiles nil)
+  ;; disable auto save
+  (setq auto-save-model nil)
   ;; make helm-projectile-find-file fast
   (setq shell-file-name "/bin/sh")
   (setq projectile-enable-caching t)
@@ -199,7 +205,6 @@
     "Revert buffer without confirmation."
     (interactive)
     (revert-buffer :ignore-auto :noconfirm))
-
   ;; In vim and evil, pasting over a text would cause it to be copied, hence making it impossible to paste the same text multiple times.
   (defun evil-paste-after-from-0 ()
     (interactive)
@@ -242,11 +247,12 @@
 
   ;; react
   (define-key evil-insert-state-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
-  ;; (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  (add-to-list 'auto-mode-alist '("pages\\/.*\\.js\\'" . rjsx-mode))
   ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 
   ;; vue
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
   ;; javascript
   (setq js2-strict-missing-semi-warning nil)
@@ -442,15 +448,21 @@ This function is called at the very end of Spacemacs initialization."
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#d2ceda" "#f2241f" "#67b11d" "#b1951d" "#3a81c3" "#a31db1" "#21b8c7" "#655370"])
+ '(auto-save-default nil)
+ '(auto-save-list-file-prefix "/Users/vimniky/.emacs.d/.cache/auto-save/")
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
  '(custom-safe-themes
    (quote
     ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (evil-multiedit helm-pydoc wgrep ivy ob-sml sml-mode github-browse-file clj-refactor edn cider queue evil-commentary hydra highlight anzu iedit undo-tree projectile helm helm-core async f s dash racket-mode faceup tide typescript-mode helm-gtags ggtags emoji-cheat-sheet-plus company-emoji nanoj-dark-theme avk-darkblue-white-theme smex xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary flycheck-haskell company-ghci company-ghc ghc helm-purpose hide-comnt window-purpose imenu-list pug-mode smart-mode-line rich-minority git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
+    (github-browse-file clj-refactor edn cider queue evil-commentary hydra highlight anzu iedit undo-tree projectile helm helm-core async f s dash racket-mode faceup tide typescript-mode helm-gtags ggtags emoji-cheat-sheet-plus company-emoji nanoj-dark-theme avk-darkblue-white-theme smex xterm-color shell-pop multi-term flyspell-correct-helm flyspell-correct eshell-z eshell-prompt-extras esh-help auto-dictionary flycheck-haskell company-ghci company-ghc ghc helm-purpose hide-comnt window-purpose imenu-list pug-mode smart-mode-line rich-minority git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl ranger yaml-mode mwim smeargle orgit org magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor grovbox-theme purescript-mode markdown-mode livid-mode skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode helm-c-yasnippet haskell-mode haml-mode gh-md pos-tip flycheck web-completion-data dash-functional tern company yasnippet ac-ispell volatile-highlights vi-tilde-fringe spaceline rainbow-delimiters org-bullets neotree lorem-ipsum ido-vertical-mode helm-themes helm-make google-translate flx-ido fancy-battery eyebrowse evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-ediff evil-args define-word clean-aindent-mode ace-jump-helm-line spacemacs-theme ws-butler window-numbering which-key web-mode web-beautify uuidgen use-package toc-org tagedit smartparens slim-mode scss-mode sass-mode reveal-in-osx-finder restart-emacs request quelpa psci psc-ide powerline popwin persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary org-plus-contrib open-junk-file move-text mmm-mode markdown-toc macrostep linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode intero info+ indent-guide hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-swoop helm-projectile helm-mode-manager helm-hoogle helm-flx helm-descbinds helm-css-scss helm-company helm-ag haskell-snippets gruvbox-theme golden-ratio flycheck-pos-tip flycheck-elm fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-iedit-state evil-escape evil-anzu eval-sexp-fu emmet-mode elm-mode elisp-slime-nav dumb-jump company-web company-tern company-statistics company-cabal column-enforce-mode coffee-mode cmm-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile aggressive-indent adaptive-wrap ace-window ace-link)))
  '(psc-ide-add-import-on-completion t t)
- '(psc-ide-rebuild-on-save nil t))
+ '(psc-ide-rebuild-on-save nil t)
+ '(savehist-autosave-interval 60)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
