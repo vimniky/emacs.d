@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ember-re-export-shared-component
+# key: ember--export-shared-component
+# --
+export { default } from 'shared/components/$0/component';

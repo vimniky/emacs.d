@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: reactClass
+# key: reactClass
+# --
+import React from 'react'
+
+import styles from './styles.scss'
+
+export default class C extends React.Component {
+  render() {
+    return (
+      <div>
+      </div>
+    )
+  }
+}

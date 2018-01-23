@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ember import service
+# key: ember-import-service
+# --
+import { inject as service } from '@ember/service';

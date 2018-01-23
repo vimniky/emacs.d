@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: extends ember service
-# key: eservie
-# --
-import Ember from 'ember'
-
-$1Ember.${2:Component}.extend({$0})

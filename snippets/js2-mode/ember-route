@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: ember-route
+# key: ember-route
+# --
+import Route from '@ember/routing/route';
+import RSVP from 'rsvp';
+
+export default Route.extend({
+
+  model() {
+    const hash = {
+    };
+    return RSVP.hash(hash);
+  },
+});
