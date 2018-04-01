@@ -32,7 +32,8 @@
          go-tab-width 8)
      (haskell :variables haskell-completion-backend 'intero)
      (typescript :variables
-                 typescript-fmt-on-save nil)
+                 typescript-fmt-on-save t
+                 typescript-fmt-tool 'typescript-formatter)
      react
      purescript
      html
