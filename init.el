@@ -14,6 +14,10 @@
      ;; themes-megapack
      (better-defaults :variables better-defaults-move-to-beginning-of-code-first t)
      (auto-completion :variables
+                      auto-completion-return-key-behavior nil
+                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence-delay 0.1
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t)
      racket
