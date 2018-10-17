@@ -2,6 +2,8 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
+;; http://spacemacs.org/doc/DOCUMENTATION.html
+
 (defun dotspacemacs/layers ()
   "Layer configuration:
 This function should only modify configuration layer settings."
@@ -21,7 +23,6 @@ This function should only modify configuration layer settings."
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
    dotspacemacs-enable-lazy-installation 'unused
-
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
    dotspacemacs-ask-for-lazy-installation t
@@ -40,12 +41,27 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     ;; auto-completion
-     ;; better-defaults
+     auto-completion
+     (better-defaults :variables better-defaults-move-to-beginning-of-code-first t)
      emacs-lisp
-     ;; git
-     ;; markdown
+     frame-geometry
+     git
+     markdown
+     yaml
+     html
      neotree
+     ;; https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/javascript
+     javascript
+     ;; https://github.com/syl20bnr/spacemacs/blob/master/layers/%2Bframeworks/react/README.org
+     react
+     ;; https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/typescript
+     (typescript :variables
+                 typescript-fmt-on-save nil
+                  typescript-fmt-tool 'typescript-formatter)
+     evil-commentary
+     osx
+     syntax-checking
+     (shell :variables shell-default-shell 'multi-term)
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -161,7 +177,7 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner 'nil
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -169,8 +185,8 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
-                                (projects . 7))
+   dotspacemacs-startup-lists '((recents . 10)
+                                (projects . 10))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -186,6 +202,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
+                         leuven
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -195,7 +212,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(doom :separator nil :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -206,7 +223,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-default-font '("Source Code Pro"
                                :size 13
                                :weight normal
-                               :width normal)
+                               :width normal
+                               :powerline-scale 1)
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -403,7 +421,7 @@ It should only modify the values of Spacemacs settings."
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%I@%S"
+   dotspacemacs-frame-title-format "%t@%a"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
@@ -449,12 +467,133 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
-  "Configuration for user code:
-This function is called at the very end of Spacemacs startup, after layer
-configuration.
-Put your configuration code here, except for variables that should be set
-before packages are loaded."
+  ;; make helm-projectile-find-file fast
+  (setq shell-file-name "/bin/sh")
+  (setq projectile-enable-caching t)
+  ;; Disable current line highlight
+  (global-hl-line-mode -1)
+  ;; Show line numbers by default
+  ;; (global-linum-mode))
+  (setq-default evil-escape-key-sequence "jk")
+  (setq-default evil-insert-state-cursor '("gray" box))
+  (setq-default evil-visual-state-cursor '("red" box))
+  (setq-default evil-normal-state-cursor '("gray" box))
+
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char)
+  (define-key evil-insert-state-map (kbd "C-j") 'evil-next-visual-line)
+  (define-key evil-insert-state-map (kbd "C-k") 'evil-previous-visual-line)
+  (define-key evil-insert-state-map (kbd "C-e") 'evil-end-of-visual-line)
+  (define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-visual-line)
+  ;; conflict with rjsx mode
+  ;; (define-key evil-insert-state-map (kbd "C-d") nil)
+  ;; (define-key rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+
+  (define-key evil-insert-state-map (kbd "C-s") 'evil-delete-whole-line)
+  (define-key evil-normal-state-map "U" 'undo-tree-redo)
+  (setq ranger-ignored-extensions '("mkv" "iso" "mp4"))
+  (setq create-lockfiles nil)
+  (define-key evil-normal-state-map ";" 'evil-ex)
+  ;; Don't persist highlighting of evil searching results
+  (global-evil-search-highlight-persist)
+  (global-evil-search-highlight-persist)
+  (turn-off-search-highlight-persist)
+
+  ;; In vim and evil, pasting over a text would cause it to be copied,
+  ;; hence making it impossible to paste the same text multiple times.
+  (defun evil-paste-after-from-0 ()
+    (interactive)
+    (let ((evil-this-register ?0))
+      (call-interactively 'evil-paste-after)))
+
+  (setq-default
+   ;; js2-mode
+   js2-basic-offset 2
+   js-indent-level 2
+   ;; typescript-indent-level 2
+   ;; evil-shift-width 2
+   json-encoding-default-indentation 2
+   json-reformat:indent-width 2
+   ;; web-mode
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-attr-indent-offset 2)
+  ;; remove annoying blinking
+  (setq company-echo-delay 0)
+  ;; add one more visual space at line end
+  (setq evil-move-cursor-back nil)
+  ;; global hungry-delete-mode and solve conflict between hungty-delete-mode
+  ;; and smart-parents-mode
+  (global-hungry-delete-mode)
+  (defadvice
+      hungry-delete-backward
+      (before sp-delete-pair-advice activate)
+    (save-match-data (sp-delete-pair (ad-get-arg 0))))
+
+  ;; evil-multiedit
+  ;; (require 'evil-multiedit)
+  ;; Highlights all matches of the selection in the buffer.
+  (define-key evil-visual-state-map "R" 'evil-multiedit-match-all)
+
+  ;; React
+  ;; ----------------------------------
+  (define-key evil-insert-state-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  (add-to-list 'auto-mode-alist '("pages\\/.*\\.js\\'" . rjsx-mode))
+  ;; See react layer for detail
+  ;; https://github.com/syl20bnr/spacemacs/blob/master/layers/%2Bframeworks/react/README.org
+  ;; (with-eval-after-load 'web-mode
+  ;;   (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+  ;;   (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+  ;;   (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
+
+  ;; Functions
+  ;; ----------------------------------
+  ;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+  (defun revert-buffer-no-confirm ()
+    "Revert buffer without confirmation."
+    (interactive)
+    (revert-buffer :ignore-auto :noconfirm))
+
+  (defun vimniky-invalidate-cache ()
+    "Invalidate projectile and recentf cache."
+    (interactive)
+    (progn (projectile-invalidate-cache nil)
+           (recentf-cleanup)))
+
+  (defun vimniky-revert-buffer ()
+    "revert current buffer to match it's curresponding file on disk"
+    (interactive)
+    (revert-buffer-no-confirm))
+
+  (defun vimniky-kill-other-buffers ()
+    "kill all other buffers but current one"
+    (interactive)
+    (spacemacs/kill-other-buffers))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yasnippet-snippets helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern dash-functional company-statistics company auto-yasnippet ac-ispell auto-complete yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org tide tern tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode rjsx-mode reveal-in-osx-finder restart-emacs rainbow-delimiters pug-mode prettier-js popwin persp-mode pcre2el password-generator paradox overseer osx-trash osx-dictionary org-plus-contrib org-bullets open-junk-file neotree nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode link-hint launchctl json-navigator json-mode js2-refactor js-doc indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md font-lock+ flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-commentary evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline diminish counsel-projectile column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-window ace-link ace-jump-helm-line))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
