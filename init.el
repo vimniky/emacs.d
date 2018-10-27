@@ -214,7 +214,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(doom :separator nil :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(vanilla :separator nil :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -223,7 +223,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
+                               :size 14
                                :weight normal
                                :width normal
                                :powerline-scale 1)
@@ -469,34 +469,75 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
-  ;; make helm-projectile-find-file fast
-  (setq shell-file-name "/bin/sh")
-  (setq projectile-enable-caching t)
-  ;; Disable current line highlight
-  (global-hl-line-mode -1)
-  ;; Show line numbers by default
-  ;; (global-linum-mode))
-  (setq-default evil-escape-key-sequence "jk")
-  (setq-default evil-insert-state-cursor '("gray" box))
-  (setq-default evil-visual-state-cursor '("red" box))
-  (setq-default evil-normal-state-cursor '("gray" box))
+  ;; --- setq-default
+  (setq-default
+   ;; --- eval
+   evil-escape-key-sequence "jk"
+   evil-normal-state-cursor '("gray" box)
+   evil-insert-state-cursor '("gray" box)
+   evil-visual-state-cursor '("red" box)
+   ;; add one more visual space at line end
+   evil-move-cursor-back nil
 
+   ;; --- others
+   create-lockfiles nil
+   ;; remove annoying blinking
+   company-echo-delay 0
+   projectile-enable-caching t
+   ;; ingnore blob files, make helm-projectile-find-file fast
+   ranger-ignored-extensions '("mkv" "iso" "mp4")
+   ;; it's faster
+   shell-file-name "/bin/sh"
+
+   ;; --- js2-mode
+   js2-basic-offset 2
+   js-indent-level 2
+   typescript-indent-level 2
+   evil-shift-width 2
+   json-encoding-default-indentation 2
+   json-reformat:indent-width 2
+
+   ;; --- web-mode
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-attr-indent-offset 2)
+
+  ;; --- setq
+  (setq
+   paradox-github-token "23ccd15c7e0eaf6202333b873a3fc0d04e657827")
+
+  ;; --- Key bindings
+  ;; --- Examples
+  ;; http://spacemacs.org/doc/DOCUMENTATION.html#commands
+  ;; (global-set-key (kbd "C-]") 'forward-char)
+  ;; (define-key evil-insert-state-map (kbd "C-]") 'forward-char)
+  ;; (spacemacs/set-leader-keys "C-]" 'forward-char)
+  ;; (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "C-]" 'forward-char)
+  ;; The first line declares SPC ] to be a prefix and the second binds
+  ;; the key sequence SPC ]] to the corresponding command.
+  ;; (spacemacs/declare-prefix "]" "bracket-prefix")
+  ;; (spacemacs/set-leader-keys "]]" 'double-bracket-command)
+
+  ;; --- normal-state-map
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-normal-state-map "U" 'undo-tree-redo)
+  (define-key evil-normal-state-map ";" 'evil-ex)
+  ;; --- insert-state-map
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char)
   (define-key evil-insert-state-map (kbd "C-j") 'evil-next-visual-line)
   (define-key evil-insert-state-map (kbd "C-k") 'evil-previous-visual-line)
   (define-key evil-insert-state-map (kbd "C-e") 'evil-end-of-visual-line)
   (define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-visual-line)
+  (define-key evil-insert-state-map (kbd "C-s") 'evil-delete-whole-line)
+  ;; --- React
   ;; conflict with rjsx mode
   ;; (define-key evil-insert-state-map (kbd "C-d") nil)
-  ;; (define-key rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+  (define-key rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+  (define-key evil-insert-state-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
 
-  (define-key evil-insert-state-map (kbd "C-s") 'evil-delete-whole-line)
-  (define-key evil-normal-state-map "U" 'undo-tree-redo)
-  (setq ranger-ignored-extensions '("mkv" "iso" "mp4"))
-  (setq create-lockfiles nil)
-  (define-key evil-normal-state-map ";" 'evil-ex)
   ;; Don't persist highlighting of evil searching results
   (global-evil-search-highlight-persist)
   (global-evil-search-highlight-persist)
@@ -509,72 +550,24 @@ dump."
     (let ((evil-this-register ?0))
       (call-interactively 'evil-paste-after)))
 
-  (setq-default
-   ;; js2-mode
-   js2-basic-offset 2
-   js-indent-level 2
-   ;; typescript-indent-level 2
-   ;; evil-shift-width 2
-   json-encoding-default-indentation 2
-   json-reformat:indent-width 2
-   ;; web-mode
-   css-indent-offset 2
-   web-mode-markup-indent-offset 2
-   web-mode-css-indent-offset 2
-   web-mode-code-indent-offset 2
-   web-mode-attr-indent-offset 2)
-  ;; remove annoying blinking
-  (setq company-echo-delay 0)
-  ;; add one more visual space at line end
-  (setq evil-move-cursor-back nil)
-  ;; global hungry-delete-mode and solve conflict between hungty-delete-mode
-  ;; and smart-parents-mode
+  ;; global hungry-delete-mode and solve conflict between
+  ;; hungty-delete-mode and smart-parents-mode
   (global-hungry-delete-mode)
   (defadvice
       hungry-delete-backward
       (before sp-delete-pair-advice activate)
     (save-match-data (sp-delete-pair (ad-get-arg 0))))
 
-  ;; evil-multiedit
-  ;; (require 'evil-multiedit)
-  ;; Highlights all matches of the selection in the buffer.
-  (define-key evil-visual-state-map "R" 'evil-multiedit-match-all)
-
-  ;; React
-  ;; ----------------------------------
-  (define-key evil-insert-state-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
-  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("pages\\/.*\\.js\\'" . rjsx-mode))
-  ;; See react layer for detail
-  ;; https://github.com/syl20bnr/spacemacs/blob/master/layers/%2Bframeworks/react/README.org
-  ;; (with-eval-after-load 'web-mode
-  ;;   (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-  ;;   (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-  ;;   (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
-
-  ;; Functions
-  ;; ----------------------------------
-  ;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+  ;; http://www.emacswiki.org/emacs-en/download/misc-cmds.el
   (defun revert-buffer-no-confirm ()
     "Revert buffer without confirmation."
     (interactive)
     (revert-buffer :ignore-auto :noconfirm))
 
-  (defun vimniky-invalidate-cache ()
-    "Invalidate projectile and recentf cache."
-    (interactive)
-    (progn (projectile-invalidate-cache nil)
-           (recentf-cleanup)))
-
   (defun vimniky-revert-buffer ()
     "revert current buffer to match it's curresponding file on disk"
     (interactive)
     (revert-buffer-no-confirm))
-
-  (defun vimniky-kill-other-buffers ()
-    "kill all other buffers but current one"
-    (interactive)
-    (spacemacs/kill-other-buffers))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
