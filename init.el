@@ -535,8 +535,8 @@ dump."
   ;; --- React
   ;; conflict with rjsx mode
   ;; (define-key evil-insert-state-map (kbd "C-d") nil)
-  (define-key rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
-  (define-key evil-insert-state-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+  ;; (define-key rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+  ;; (define-key evil-insert-state-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
 
   ;; Don't persist highlighting of evil searching results
   (global-evil-search-highlight-persist)
